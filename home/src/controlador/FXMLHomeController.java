@@ -7,7 +7,8 @@ package controlador;
  */
 
 
-import home.producto;
+import java.awt.event.ActionListener;
+import modelo.producto;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -19,7 +20,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
+import javafx.event.*;
 import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -41,7 +44,7 @@ import javafx.stage.WindowEvent;
  *
  * @author ASUS
  */
-public class FXMLDocumentController implements Initializable {
+public class FXMLHomeController implements Initializable {
     
     
     @FXML
@@ -72,19 +75,12 @@ public class FXMLDocumentController implements Initializable {
     ArrayList<producto> jordan = new ArrayList<producto>();
    
     producto hola = new producto("helado","rico");
+    producto hola2 = new producto("pan","no rico");
     
-    
-
-    public FXMLDocumentController() {
-    }
-    
-    
-     ObservableList<producto> datos = FXCollections.observableArrayList(
-                new producto("pan", "melo"),
-                new producto("cepillo", "cabello"),
-                hola
-             
-        );
+  
+ 
+       
+     
      
     
     @FXML
@@ -97,11 +93,17 @@ public class FXMLDocumentController implements Initializable {
             System.out.println("hola"); 
         }
         
-        
+    
         if (evt.equals(homecarrito)){
             loadStage("/vista/FXMLcarrito.fxml", event);
         }else{
             System.out.println("hola2");
+        }
+        
+        for (int i = 0; i < jordan.size(); i++) {
+            if(evt.equals(jordan.get(i).boton2)){
+                loadStage("/vista/FXMLproducto.fxml", event);
+            }
         }
         
     }
@@ -136,22 +138,76 @@ public class FXMLDocumentController implements Initializable {
             });  
 
         } catch (IOException ex) {
-            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FXMLHomeController.class.getName()).log(Level.SEVERE, null, ex);
         }
                 
     }  
     
+    
+     class ButtonHandler implements EventHandler<ActionEvent>{
+
+        @Override
+        public void handle(ActionEvent event) {
+            
+            try {
+    
+           //((Node)(event.getSource())).getScene().getWindow().hide();    
+            
+            
+            Object eventSource = event.getSource(); 
+            Node sourceAsNode = (Node) eventSource ;
+            Scene oldScene = sourceAsNode.getScene();
+            Window window = oldScene.getWindow();
+            Stage stage = (Stage) window ;
+            stage.hide();
+            
+           
+                        
+            Parent root = FXMLLoader.load(getClass().getResource("/vista/FXMLproducto.fxml"));
+            Scene scene = new Scene(root);              
+            Stage newStage = new Stage();
+            newStage.setScene(scene);
+            newStage.show();  
+                                    
+            newStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                @Override
+                public void handle(WindowEvent event) {
+                    Platform.exit();
+                }
+            });  
+
+        } catch (IOException ex) {
+            Logger.getLogger(FXMLHomeController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        }
+        
+    }
+    
+   
+            
+            
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
+        jordan.add(hola);
+        jordan.add(hola2);
+        
+        for (int i = 0; i < jordan.size(); i++) {
+            jordan.get(i).boton2.setOnAction(new ButtonHandler());
+        }
+        
+        
+        ObservableList<producto> datos = FXCollections.observableArrayList(jordan);
         boton1.setCellValueFactory(new PropertyValueFactory<producto, String>("boton1"));
         boton2.setCellValueFactory(new PropertyValueFactory<producto, String>("boton2"));
         categoria.setCellValueFactory(new PropertyValueFactory<producto, String>("categoria"));
         nombre.setCellValueFactory(new PropertyValueFactory<producto, String>("nombre"));
         
+        
+        
         htabla.setItems(datos);
-        
-        
+       
         
         
         
