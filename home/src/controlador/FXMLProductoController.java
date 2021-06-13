@@ -64,7 +64,7 @@ public class FXMLProductoController implements Initializable {
 
     @FXML
     private Button BotonVolver;
-    
+    // funcioon
      private void loadStage(String url, Event event){
             
         try {
@@ -99,7 +99,7 @@ public class FXMLProductoController implements Initializable {
         }
                 
     }
-     
+     // eneto de los botones creados en la vista
      @FXML
     private void eventAction(ActionEvent event){
         Object evt = event.getSource();

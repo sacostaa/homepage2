@@ -72,33 +72,33 @@ public class FXMLHomeController implements Initializable {
     @FXML
     private TableColumn<producto, String> boton2;
     
+    
+    //prueba creando productos 
     ArrayList<producto> jordan = new ArrayList<producto>();
-   
     producto hola = new producto("helado","rico");
     producto hola2 = new producto("pan","no rico");
+    producto hola3 = new producto("carne","rico");
+    producto hola4 = new producto("pollo","no rico");
+    producto hola5 = new producto("tacos","muy rico");
     
   
  
        
      
      
-    
+    // evento de botones ya creados en la vista 
     @FXML
     private void eventAction(ActionEvent event){
         Object evt = event.getSource();
         
         if (evt.equals(homelogout)){
             loadStage("/vista/FXMLlogout.fxml", event);
-        }else{
-            System.out.println("hola"); 
-        }
+       
         
     
         if (evt.equals(homecarrito)){
             loadStage("/vista/FXMLcarrito.fxml", event);
-        }else{
-            System.out.println("hola2");
-        }
+        
         
         for (int i = 0; i < jordan.size(); i++) {
             if(evt.equals(jordan.get(i).boton2)){
@@ -106,8 +106,12 @@ public class FXMLHomeController implements Initializable {
             }
         }
         
+    
+        }
+        }
     }
     
+    //funcion para caragar una nueva ventana
     private void loadStage(String url, Event event){
             
         try {
@@ -143,17 +147,16 @@ public class FXMLHomeController implements Initializable {
                 
     }  
     
-    
+    //evento de el boton ver prooducto
      class ButtonHandler implements EventHandler<ActionEvent>{
 
-        @Override
         public void handle(ActionEvent event) {
-            
+           
             try {
     
            //((Node)(event.getSource())).getScene().getWindow().hide();    
             
-            
+                
             Object eventSource = event.getSource(); 
             Node sourceAsNode = (Node) eventSource ;
             Scene oldScene = sourceAsNode.getScene();
@@ -167,7 +170,15 @@ public class FXMLHomeController implements Initializable {
             Scene scene = new Scene(root);              
             Stage newStage = new Stage();
             newStage.setScene(scene);
-            newStage.show();  
+            newStage.show(); 
+            
+            
+                for (int i = 0; i < jordan.size(); i++) {
+                    if (jordan.get(i).boton2== event.getSource()){
+                        System.out.println(i+1);
+                    }
+                }
+            
                                     
             newStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
                 @Override
@@ -183,33 +194,29 @@ public class FXMLHomeController implements Initializable {
         
     }
     
-   
-            
-            
-    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+        //agregando productos
         jordan.add(hola);
         jordan.add(hola2);
+        jordan.add(hola3);
+        jordan.add(hola4);
+        jordan.add(hola5);
         
+        
+        //adicionandole los eventos a el boton ver producto de cada producto
         for (int i = 0; i < jordan.size(); i++) {
             jordan.get(i).boton2.setOnAction(new ButtonHandler());
+            
         }
         
-        
+        //creacion de la tabla con los produtos
         ObservableList<producto> datos = FXCollections.observableArrayList(jordan);
         boton1.setCellValueFactory(new PropertyValueFactory<producto, String>("boton1"));
         boton2.setCellValueFactory(new PropertyValueFactory<producto, String>("boton2"));
         categoria.setCellValueFactory(new PropertyValueFactory<producto, String>("categoria"));
         nombre.setCellValueFactory(new PropertyValueFactory<producto, String>("nombre"));
-        
-        
-        
         htabla.setItems(datos);
-       
-        
-        
         
     }  
     
